@@ -41,12 +41,14 @@ def get_vacansies_sj(sj_secret_key):
     url = "https://api.superjob.ru/2.0/vacancies/"
     payload = {
         "town":4,
+        "keyword":"программист",
     }
     response = requests.get(url, headers=headers, params=payload)
     response.raise_for_status()
     vacansies = response.json()["objects"]
     for vacansy in vacansies:
         pprint(vacansy["profession"])
+        pprint(vacansy)
 
 
 def predict_rub_salary(salary_from, salary_to, salary_currency):
