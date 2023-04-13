@@ -21,7 +21,6 @@ def get_vacancies_hh(language):
         page_payload = page_response.json()
         pages_number = page_payload["pages"]
         page += 1
-        print(page)
         vacancies_found = page_payload['found']
         for vacansy in page_payload['items']:
             if vacansy['salary']:
@@ -56,7 +55,6 @@ def get_vacancies_sj(sj_secret_key, language):
         vacancies_found = response.json()["total"]
         vacancies = response.json()["objects"]
         page += 1
-        print(page)
         for vacansy in vacancies:
             predicted_salary = predict_rub_salary(vacansy["payment_from"], vacansy["payment_to"], vacansy["currency"])
             if predicted_salary:
@@ -105,7 +103,5 @@ if __name__ == "__main__":
     for language in languages:
         language_params_hh[language] = get_vacancies_hh(language)
         language_params_sj[language] = get_vacancies_sj(sj_secret_key, language)
-    pprint(language_params_sj)
-    pprint(language_params_hh)
     make_table(language_params_sj, "SuperJob")
     make_table(language_params_hh, "HeadHunter")
