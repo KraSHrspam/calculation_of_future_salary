@@ -88,7 +88,7 @@ def make_table(languages_params, title):
     ]
     for language, languages_params in languages_params.items():
         table_content.append([language, languages_params["vacancies_found"], languages_params["vacancies_processed"], languages_params["average_salary"]])
-    table = AsciiTable(table_content,title)
+    table = AsciiTable(table_content, title)
     print(table.table)
 
 
