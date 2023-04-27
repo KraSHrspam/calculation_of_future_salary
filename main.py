@@ -1,9 +1,9 @@
-import requests
-from pprint import pprint
 import os
-from terminaltables import AsciiTable
-from dotenv import load_dotenv
 from time import sleep
+
+import requests
+from dotenv import load_dotenv
+from terminaltables import AsciiTable
 
 
 def get_vacancies_hh(language):
