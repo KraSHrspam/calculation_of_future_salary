@@ -33,7 +33,7 @@
 
 Файл `.env` должен выглядить так:
 ```
-SECRET_KEY=v3.r.137377390.a17b942bb89c59eggwpa7e658fb2g4fd037dde306.284b02bef41a64
+SJ_SECRET_KEY=v3.r.137377390.a17b942bb89c59eggwpa7e658fb2g4fd037dde306.284b02bef41a64
 ```
 
 ### Как запустить скрипт?
