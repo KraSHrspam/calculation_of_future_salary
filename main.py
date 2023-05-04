@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 from terminaltables import AsciiTable
 
 
-def get_vacancies_hh(language):
+def get_vacancies_statistics_hh(language):
     salaries = []
     url = "https://api.hh.ru/vacancies"
     page = 0
@@ -43,7 +43,7 @@ def get_vacancies_hh(language):
     }
 
 
-def get_vacancies_sj(sj_secret_key, language):
+def get_vacancies_statistics_sj(sj_secret_key, language):
     salaries = []
     url = "https://api.superjob.ru/2.0/vacancies/"
     page = 1
@@ -111,7 +111,7 @@ if __name__ == "__main__":
     language_params_hh = {}
     language_params_sj = {}
     for language in languages:
-        language_params_hh[language] = get_vacancies_hh(language)
-        language_params_sj[language] = get_vacancies_sj(sj_secret_key, language)
+        language_params_hh[language] = get_vacancies_statistics_hh(language)
+        language_params_sj[language] = get_vacancies_statistics_sj(sj_secret_key, language)
     make_table(language_params_sj, "SuperJob")
     make_table(language_params_hh, "HeadHunter")
