@@ -24,7 +24,11 @@ def get_vacancies_hh(language):
         vacancies_found = page_payload['found']
         for vacansy in page_payload['items']:
             if vacansy['salary']:
-                predicted_salary = predict_rub_salary(vacansy['salary']['from'], vacansy['salary']['to'], vacansy['salary']['currency'])
+                predicted_salary = predict_rub_salary(
+                    vacansy['salary']['from'],
+                    vacansy['salary']['to'],
+                    vacansy['salary']['currency']
+                )
                 if predicted_salary:
                     salaries.append(predicted_salary)
     vacancies_processed = len(salaries)
@@ -38,17 +42,18 @@ def get_vacancies_hh(language):
         "average_salary": average_salary
     }
 
+
 def get_vacancies_sj(sj_secret_key, language):
     salaries = []
     url = "https://api.superjob.ru/2.0/vacancies/"
     page = 1
     while True:
-        headers = {"X-Api-App-Id":sj_secret_key,
+        headers = {"X-Api-App-Id": sj_secret_key,
                    "Content-Type": "application/x-www-form-urlencoded"}
         payload = {
-            "town":4,
-            "keyword":language,
-            "page":page,
+            "town": 4,
+            "keyword": language,
+            "page": page,
         }
         response = requests.get(url, headers=headers, params=payload)
         response.raise_for_status()
@@ -72,6 +77,7 @@ def get_vacancies_sj(sj_secret_key, language):
         "average_salary": average_salary
     }
 
+
 def predict_rub_salary(salary_from, salary_to, salary_currency):
     if salary_currency != "RUR" and salary_currency != "rub":
         return
@@ -82,12 +88,18 @@ def predict_rub_salary(salary_from, salary_to, salary_currency):
     elif salary_to:
         return salary_to*0.8
 
+
 def make_table(languages_params, title):
     table_content = [
         ["Язык программирования", "Вакансий найдено", "Вакансий обработано", "Средняя зарплата"],
     ]
     for language, languages_params in languages_params.items():
-        table_content.append([language, languages_params["vacancies_found"], languages_params["vacancies_processed"], languages_params["average_salary"]])
+        table_content.append([
+            language,
+            languages_params["vacancies_found"],
+            languages_params["vacancies_processed"],
+            languages_params["average_salary"]
+        ])
     table = AsciiTable(table_content, title)
     print(table.table)
 
@@ -95,11 +107,9 @@ def make_table(languages_params, title):
 if __name__ == "__main__":
     load_dotenv()
     languages = ["Python", "Java", "JavaScript"]
-    sj_secret_key = os.getenv("SECRET_KEY")
-    language_params_hh = {
-    }
-    language_params_sj = {
-    }
+    sj_secret_key = os.getenv("SJ_SECRET_KEY")
+    language_params_hh = {}
+    language_params_sj = {}
     for language in languages:
         language_params_hh[language] = get_vacancies_hh(language)
         language_params_sj[language] = get_vacancies_sj(sj_secret_key, language)
