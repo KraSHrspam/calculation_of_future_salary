@@ -59,14 +59,15 @@ def get_vacancies_statistics_sj(sj_secret_key, language):
         }
         response = requests.get(url, headers=headers, params=payload)
         response.raise_for_status()
-        vacancies_found = response.json()["total"]
-        vacancies = response.json()["objects"]
+        response_content = response.json()
+        vacancies_found = response_content["total"]
+        vacancies = response_content["objects"]
         page += 1
         for vacansy in vacancies:
             predicted_salary = predict_rub_salary(vacansy["payment_from"], vacansy["payment_to"], vacansy["currency"])
             if predicted_salary:
                 salaries.append(predicted_salary)
-        if not response.json()["more"]:
+        if not response_content["more"]:
             break
     vacancies_processed = len(salaries)
     if vacancies_processed:
