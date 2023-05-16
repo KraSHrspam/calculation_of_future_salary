@@ -6,17 +6,18 @@ from dotenv import load_dotenv
 from terminaltables import AsciiTable
 
 
-def get_vacancies_statistics_hh(language):
+def get_vacancies_statistics_hh(language, request_delay_time):
     salaries = []
     url = "https://api.hh.ru/vacancies"
+    moscow_area_number = 1
     page = 0
     pages_number = 1
     while page < pages_number:
         payload = {"text": language,
-                   "area": "1",
+                   "area": moscow_area_number,
                    "page": page}
         page_response = requests.get(url, params=payload)
-        sleep(0.2)
+        sleep(request_delay_time)
         page_response.raise_for_status()
         page_payload = page_response.json()
         pages_number = page_payload["pages"]
@@ -46,12 +47,13 @@ def get_vacancies_statistics_hh(language):
 def get_vacancies_statistics_sj(sj_secret_key, language):
     salaries = []
     url = "https://api.superjob.ru/2.0/vacancies/"
+    moscow_town_number = 4
     page = 1
     while True:
         headers = {"X-Api-App-Id": sj_secret_key,
                    "Content-Type": "application/x-www-form-urlencoded"}
         payload = {
-            "town": 4,
+            "town": moscow_town_number,
             "keyword": language,
             "page": page,
         }
@@ -101,17 +103,18 @@ def make_table(languages_params, title):
             languages_params["average_salary"]
         ])
     table = AsciiTable(table_content, title)
-    print(table.table)
+    return table.table
 
 
 if __name__ == "__main__":
     load_dotenv()
+    request_delay_time = 0.2
     languages = ["Python", "Java", "JavaScript"]
     sj_secret_key = os.getenv("SJ_SECRET_KEY")
     language_params_hh = {}
     language_params_sj = {}
     for language in languages:
-        language_params_hh[language] = get_vacancies_statistics_hh(language)
+        language_params_hh[language] = get_vacancies_statistics_hh(language, request_delay_time)
         language_params_sj[language] = get_vacancies_statistics_sj(sj_secret_key, language)
-    make_table(language_params_sj, "SuperJob")
-    make_table(language_params_hh, "HeadHunter")
+    print(make_table(language_params_sj, "SuperJob"))
+    print(make_table(language_params_hh, "HeadHunter"))
